@@ -19,8 +19,8 @@ RUN apt-get update && \
     libmpich2-dev \
     zlib1g-dev \
     libssl-dev \
-    libgtest-dev \
     liblz4-dev \
+    libbz2-dev \
     && apt-get clean \
     && apt-get purge -y
 
