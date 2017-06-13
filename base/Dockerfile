@@ -41,14 +41,3 @@ RUN git clone --depth 1 https://github.com/Blosc/c-blosc /tmp/c-blosc && \
     cmake --build . && \
     cmake --build . --target install && \
     rm -rf /tmp/c-blosc
-
-# Install Google Test
-RUN wget -P /tmp https://github.com/google/googletest/archive/release-1.8.0.tar.gz && \
-    tar xf /tmp/release-1.8.0.tar.gz -C /tmp && \
-    rm /tmp/release-1.8.0.tar.gz && \
-    cd /tmp/googletest-release-1.8.0/googletest && \
-    cmake -DBUILD_SHARED_LIBS=ON . && \
-    make && \
-    cp -a include/gtest /usr/include && \
-    cp -a libgtest_main.so libgtest.so /usr/lib/ && \
-    rm -rf /tmp/googletest-release-1.8.0
