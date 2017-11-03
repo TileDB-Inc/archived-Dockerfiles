@@ -19,7 +19,8 @@ RUN wget -P /home/tiledb https://github.com/TileDB-Inc/TileDB/archive/1.1.0.tar.
     && mkdir build \
     && cd build \
     && ../bootstrap \
-    && make all -j \
+    && make -j \
+    && make examples -j \
     && make install
    
 RUN chown -R tiledb: /home/tiledb
