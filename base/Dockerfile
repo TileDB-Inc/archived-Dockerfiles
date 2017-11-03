@@ -8,13 +8,11 @@ FROM ubuntu:trusty
 
 RUN apt-get update && apt-get install -y \
     build-essential \
-    git \
     libbz2-dev \
     libc6 \
     libc6-dev \
     liblz4-dev \
     libsnappy-dev \
-    vim \
     wget \
     zlib1g-dev \
     && apt-get clean \
