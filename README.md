@@ -1,4 +1,7 @@
 # TileDB-Docker
+
+[![Build Status](https://travis-ci.org/TileDB-Inc/TileDB-Docker.svg?branch=master)](https://travis-ci.org/TileDB-Inc/TileDB-Docker)
+
 Docker files for TileDB
 
 To build:
