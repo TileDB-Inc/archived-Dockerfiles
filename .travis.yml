@@ -1,0 +1,17 @@
+os:
+  - linux
+
+dist: trusty 
+
+services:
+  - docker
+
+env:
+  - ARCH=x86_64
+
+install:
+  - docker build -t tiledb:base base
+  - docker build -t tiledb:stable stable
+
+script:
+  - docker run tiledb:stable
