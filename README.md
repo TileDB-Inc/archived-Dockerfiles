@@ -8,14 +8,11 @@ Install the Docker daemon:
 
 https://www.docker.com/community-edition
 
-Checkout the TileDB-Docker repo:
+Checkout the TileDB-Docker repo and build the images:
 
     git clone https://github.com/TileDB-Inc/TileDB-Docker
     cd TileDB-Docker
-
-To build:
-
-
+    
     docker build -t tiledb:base base
     docker build -t tiledb:stable stable
     
