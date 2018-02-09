@@ -1,5 +1,5 @@
 # Build and install the latest TileDB unstable (in-development)
-  version.
+# version.
 
 # To build:
 #   docker build -t tiledb:unstable
