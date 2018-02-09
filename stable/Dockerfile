@@ -1,7 +1,10 @@
-# Build and install the latest tiledb stable release 
+# Build and install the latest TileDB stable release 
 
-# To build run:
-# docker build -t tiledb:stable
+# To build:
+#   docker build -t tiledb:stable
+#
+# Use the build arg 'enable' to configure optional TileDB components, e.g.:
+#   docker build --build-arg enable=s3,hdfs -t tiledb:stable
 
 FROM tiledb:base
 
@@ -10,15 +13,19 @@ RUN useradd tiledb
 RUN mkdir /home/tiledb 
 ENV HOME /home/tiledb
 
-RUN cmake --version
+# Optional components to enable (defaults to empty).
+ARG enable
+# Stable version number of TileDB to install.
+ARG version=1.2.0
 
-RUN wget -P /home/tiledb https://github.com/TileDB-Inc/TileDB/archive/1.1.0.tar.gz \
-    && tar xzf /home/tiledb/1.1.0.tar.gz -C /home/tiledb \
-    && rm /home/tiledb/1.1.0.tar.gz \
-    && cd /home/tiledb/TileDB-1.1.0 \
+RUN wget -P /home/tiledb https://github.com/TileDB-Inc/TileDB/archive/${version}.tar.gz \
+    && tar xzf /home/tiledb/${version}.tar.gz -C /home/tiledb \
+    && rm /home/tiledb/${version}.tar.gz \
+    && cd /home/tiledb/TileDB-${version} \
     && mkdir build \
     && cd build \
-    && ../bootstrap \
+    && ../scripts/install-deps.sh --enable=${enable} \
+    && ../bootstrap --prefix=/usr --enable=${enable} \
     && make \
     && make examples \
     && make install
@@ -28,5 +35,5 @@ RUN chown -R tiledb: /home/tiledb
 EXPOSE 22
 
 USER tiledb
-WORKDIR /home/tiledb/TileDB-1.1.0
+WORKDIR /home/tiledb/TileDB-${version}
 ENTRYPOINT /bin/bash
