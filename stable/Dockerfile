@@ -8,11 +8,6 @@
 
 FROM tiledb:base
 
-# Setup home environment
-RUN useradd tiledb
-RUN mkdir /home/tiledb 
-ENV HOME /home/tiledb
-
 # Optional components to enable (defaults to empty).
 ARG enable
 # Stable version number of TileDB to install.

@@ -9,12 +9,12 @@ This repository contains the Docker files for TileDB.
 1. Install the Docker daemon from https://www.docker.com/community-edition
 
 2. Clone the TileDB-Docker repo and build the images:
-
-    git clone https://github.com/TileDB-Inc/TileDB-Docker
-    cd TileDB-Docker
-    
-    docker build -t tiledb:base base
-    docker build -t tiledb:stable stable
+```
+git clone https://github.com/TileDB-Inc/TileDB-Docker
+cd TileDB-Docker
+docker build -t tiledb:base base
+docker build -t tiledb:stable stable
+```
 
 There is also a `tiledb:unstable` image if you'd like the latest and
 greatest (but potentially unstable) TileDB version, and a `tiledb:dev`
