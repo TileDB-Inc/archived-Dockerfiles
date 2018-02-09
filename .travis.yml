@@ -10,9 +10,32 @@ services:
 env:
   - ARCH=x86_64
 
+matrix:
+  include:
+    - env: TILEDB_IMG="stable"
+
+    - env: TILEDB_IMG="unstable"
+
+    - env: TILEDB_IMG="dev"
+
+    - env:
+        - USE_HDFS="ON"
+        - TILEDB_IMG="stable"
+
+    - env:
+        - USE_S3="ON"
+        - TILEDB_IMG="stable"
+
 install:
   - docker build -t tiledb:base base
-  - docker build -t tiledb:stable stable
+
+  - if [[ "$USE_HDFS" == "ON" ]]; then
+      docker build -t tiledb:${TILEDB_IMG} ${TILEDB_IMG}
+    elif [[ "$USE_S3" == "ON" ]]; then
+      docker build -t tiledb:${TILEDB_IMG} ${TILEDB_IMG}
+    else
+      docker build -t tiledb:${TILEDB_IMG} ${TILEDB_IMG}
+    fi
 
 script:
-  - docker run tiledb:stable
+  - docker run tiledb:${TILEDB_IMG}
