@@ -30,9 +30,9 @@ install:
   - docker build -t tiledb:base base
 
   - if [[ "$USE_HDFS" == "ON" ]]; then
-      docker build -t tiledb:${TILEDB_IMG} ${TILEDB_IMG};
+      docker build --build-arg enable=hdfs -t tiledb:${TILEDB_IMG} ${TILEDB_IMG};
     elif [[ "$USE_S3" == "ON" ]]; then
-      docker build -t tiledb:${TILEDB_IMG} ${TILEDB_IMG};
+      docker build --build-arg enable=s3 -t tiledb:${TILEDB_IMG} ${TILEDB_IMG};
     else
       docker build -t tiledb:${TILEDB_IMG} ${TILEDB_IMG};
     fi
