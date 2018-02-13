@@ -14,7 +14,6 @@ ARG enable
 
 RUN git clone https://github.com/TileDB-Inc/TileDB.git /home/tiledb/TileDB \
     && cd /home/tiledb/TileDB \
-    && git checkout ttd/install-deps-updates \
     && mkdir build \
     && cd build \
     && ../scripts/install-deps.sh --enable=${enable} \
