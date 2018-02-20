@@ -2,7 +2,7 @@ language: generic
 os:
   - linux
 
-dist: trusty 
+dist: trusty
 
 services:
   - docker
@@ -12,19 +12,17 @@ env:
 
 matrix:
   include:
-    - env: TILEDB_IMG="stable"
-
-    - env: TILEDB_IMG="unstable"
+    - env: TILEDB_IMG="release"
 
     - env: TILEDB_IMG="dev"
 
     - env:
         - USE_HDFS="ON"
-        - TILEDB_IMG="stable"
+        - TILEDB_IMG="release"
 
     - env:
         - USE_S3="ON"
-        - TILEDB_IMG="stable"
+        - TILEDB_IMG="release"
 
 install:
   - docker build -t tiledb:base base

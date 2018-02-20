@@ -13,6 +13,7 @@ FROM tiledb:base
 # Optional components to enable (defaults to empty).
 ARG enable
 
+# Install TileDB
 RUN git clone https://github.com/TileDB-Inc/TileDB.git /home/tiledb/TileDB \
     && cd /home/tiledb/TileDB \
     && mkdir build \
@@ -24,10 +25,19 @@ RUN git clone https://github.com/TileDB-Inc/TileDB.git /home/tiledb/TileDB \
     && make install \
     && echo 'export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/home/tiledb/TileDB/dist/lib' >> /home/tiledb/.bashrc
 
+# Install Python bindings
+RUN git clone https://github.com/TileDB-Inc/TileDB-Py.git /home/tiledb/TileDB-Py \
+    && wget -P /tmp https://bootstrap.pypa.io/get-pip.py \
+    && python3 /tmp/get-pip.py \
+    && rm /tmp/get-pip.py \
+    && cd /home/tiledb/TileDB-Py \
+    && pip install -r requirements_dev.txt \
+    && python3 setup.py install --tiledb=/home/tiledb/TileDB/dist
+
 RUN chown -R tiledb: /home/tiledb
 
 EXPOSE 22
 
 USER tiledb
-WORKDIR /home/tiledb/TileDB
+WORKDIR /home/tiledb
 ENTRYPOINT /bin/bash
