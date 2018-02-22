@@ -36,6 +36,7 @@ RUN git clone https://github.com/TileDB-Inc/TileDB-Py.git /home/tiledb/TileDB-Py
 
 RUN chown -R tiledb: /home/tiledb
 
+ENV LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH"
 EXPOSE 22
 
 USER tiledb

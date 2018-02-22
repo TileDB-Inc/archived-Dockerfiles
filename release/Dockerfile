@@ -41,6 +41,7 @@ RUN wget -P /home/tiledb https://github.com/TileDB-Inc/TileDB-Py/archive/${pyver
 
 RUN chown -R tiledb: /home/tiledb
 
+ENV LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH"
 EXPOSE 22
 
 USER tiledb
