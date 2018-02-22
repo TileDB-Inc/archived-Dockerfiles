@@ -8,6 +8,8 @@ Download prebuilt Docker images from Dockerhub:
 
 https://hub.docker.com/r/tiledb/tiledb/
 
+```docker pull tiledb/tiledb:1.2.0```
+
 ## Instructions
 
 1. Install the Docker daemon from https://www.docker.com/community-edition
