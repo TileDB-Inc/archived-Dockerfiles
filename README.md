@@ -8,7 +8,10 @@ Download prebuilt Docker images from Dockerhub:
 
 https://hub.docker.com/r/tiledb/tiledb/
 
-```docker pull tiledb/tiledb:1.2.0```
+```
+docker pull tiledb/tiledb:1.2.0
+docker run -it tiledb/tiledb:1.2.0
+```
 
 ## Instructions
 
