@@ -32,7 +32,7 @@ RUN git clone https://github.com/TileDB-Inc/TileDB-Py.git /home/tiledb/TileDB-Py
     && rm /tmp/get-pip.py \
     && cd /home/tiledb/TileDB-Py \
     && pip install -r requirements_dev.txt \
-    && python3 setup.py install --tiledb=/home/tiledb/TileDB/dist
+    && python3 setup.py develop --tiledb=/home/tiledb/TileDB/dist
 
 RUN chown -R tiledb: /home/tiledb
 

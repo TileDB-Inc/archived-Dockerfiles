@@ -14,6 +14,7 @@ ENV HOME /home/tiledb
 RUN apt-get update && apt-get install -y \
     build-essential \
     wget \
+    unzip \
     git \
     python3 \
     python3-dev \
