@@ -9,11 +9,11 @@ Download prebuilt Docker images from Dockerhub:
 https://hub.docker.com/r/tiledb/tiledb/
 
 ```
-docker pull tiledb/tiledb:1.2.0
-docker run -it tiledb/tiledb:1.2.0
-$ cd TileDB-1.2.0/build/examples/c_api
+docker pull tiledb/tiledb:<version>
+docker run -it tiledb/tiledb:<version>
+$ cd TileDB-<version>/build/examples/c_api
 $ ./tiledb_version_c
-TileDB v1.2.0
+TileDB v<version>
 ```
 
 ## Instructions
