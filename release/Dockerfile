@@ -11,7 +11,7 @@ FROM tiledb:base
 # Optional components to enable (defaults to empty).
 ARG enable
 # Release version number of TileDB to install.
-ARG version=1.2.1
+ARG version=1.2.2
 # Release version number of TileDB-Py to install.
 ARG pyversion=0.1.1
 
