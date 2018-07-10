@@ -18,11 +18,10 @@ RUN git clone https://github.com/TileDB-Inc/TileDB.git /home/tiledb/TileDB \
     && cd /home/tiledb/TileDB \
     && mkdir build \
     && cd build \
-    && ../scripts/install-deps.sh --enable=${enable} \
     && ../bootstrap --enable-debug --enable-verbose --enable=${enable} \
-    && make \
-    && make examples \
-    && make install \
+    && make -j2 \
+    && make -j2 examples \
+    && make install-tiledb \
     && echo 'export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/home/tiledb/TileDB/dist/lib' >> /home/tiledb/.bashrc
 
 # Install Python bindings
