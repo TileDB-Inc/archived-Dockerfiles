@@ -11,9 +11,9 @@ FROM tiledb:base
 # Optional components to enable (defaults to empty).
 ARG enable
 # Release version number of TileDB to install.
-ARG version=1.2.2
+ARG version=1.3.0
 # Release version number of TileDB-Py to install.
-ARG pyversion=0.1.1
+ARG pyversion=0.2.0
 
 # Install TileDB
 RUN wget -P /home/tiledb https://github.com/TileDB-Inc/TileDB/archive/${version}.tar.gz \
@@ -22,23 +22,22 @@ RUN wget -P /home/tiledb https://github.com/TileDB-Inc/TileDB/archive/${version}
     && cd /home/tiledb/TileDB-${version} \
     && mkdir build \
     && cd build \
-    && ../scripts/install-deps.sh --enable=${enable} \
     && ../bootstrap --prefix=/usr/local --enable=${enable} \
-    && make \
-    && make examples \
-    && make install
+    && make -j2 \
+    && make -j2 examples \
+    && make install-tiledb
 
 # Install Python bindings
 RUN wget -P /tmp https://bootstrap.pypa.io/get-pip.py \
     && python3 /tmp/get-pip.py \
     && rm /tmp/get-pip.py \
     && cd /home/tiledb \
-    && pip download tiledb==${pyversion} \
-    && tar xzf /home/tiledb/tiledb-${pyversion}.tar.gz -C /home/tiledb \
-    && rm /home/tiledb/tiledb-${pyversion}.tar.gz \
-    && cd /home/tiledb/tiledb-${pyversion} \
-    && pip install -r requirements_dev.txt \
-    && pip install .
+    && wget https://github.com/TileDB-Inc/TileDB-Py/archive/${pyversion}.tar.gz \
+    && tar xzf /home/tiledb/${pyversion}.tar.gz \
+    && rm ${pyversion}.tar.gz \
+    && cd /home/tiledb/TileDB-Py-${pyversion} \
+    && pip install -r requirements.txt \
+    && python3 setup.py install --tiledb=/usr/local
 
 RUN chown -R tiledb: /home/tiledb
 
