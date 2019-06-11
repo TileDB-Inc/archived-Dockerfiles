@@ -22,7 +22,7 @@ RUN wget -P /home/tiledb https://github.com/TileDB-Inc/TileDB/archive/${version}
     && cd /home/tiledb/TileDB-${version} \
     && mkdir build \
     && cd build \
-    && ../bootstrap --prefix=/usr/local --enable=${enable} \
+    && ../bootstrap --prefix=/usr/local --enable-s3 --enable=${enable} \
     && make -j2 \
     && make -j2 examples \
     && make install-tiledb
