@@ -13,7 +13,7 @@ ARG enable
 # Release version number of TileDB to install.
 ARG version=1.5.1
 # Release version number of TileDB-Py to install.
-ARG pyversion=0.4.2
+# -- see below --
 
 # Install TileDB
 RUN wget -P /home/tiledb https://github.com/TileDB-Inc/TileDB/archive/${version}.tar.gz \
@@ -22,28 +22,34 @@ RUN wget -P /home/tiledb https://github.com/TileDB-Inc/TileDB/archive/${version}
     && cd /home/tiledb/TileDB-${version} \
     && mkdir build \
     && cd build \
-    && ../bootstrap --prefix=/usr/local --enable=${enable} \
-    && make -j2 \
-    && make -j2 examples \
-    && make install-tiledb
+    && ../bootstrap --prefix=/usr/local --enable-s3 --enable=${enable} \
+    && make -j$(nproc) \
+    && make -j$(nproc) examples \
+    && make install-tiledb \
+    && rm -rf /home/tiledb/TileDB-${version}
+
+# Release version number of TileDB-Py to install.
+ARG pyversion=0.4.2
+ENV pyversion=$pyversion SETUPTOOLS_SCM_PRETEND_VERSION=$pyversion
+
+# -----------------------------------------------------------------------------
 
 # Install Python bindings
 RUN wget -P /tmp https://bootstrap.pypa.io/get-pip.py \
     && python3 /tmp/get-pip.py \
     && rm /tmp/get-pip.py \
-    && cd /home/tiledb \
-    && wget https://pypi.io/packages/source/t/tiledb/tiledb-${pyversion}.tar.gz \
-    && tar xzf /home/tiledb/tiledb-${pyversion}.tar.gz \
-    && rm tiledb-${pyversion}.tar.gz \
-    && cd /home/tiledb/tiledb-${pyversion} \
+    && wget https://github.com/TileDB-Inc/TileDB-Py/archive/${pyversion}.tar.gz -O /home/tiledb/Py-${pyversion}.tar.gz \
+    && tar xzf /home/tiledb/Py-${pyversion}.tar.gz -C /home/tiledb \
+    && rm /home/tiledb/Py-${pyversion}.tar.gz \
+    && cd /home/tiledb/TileDB-Py-${pyversion} \
     && pip install -r requirements.txt \
-    && python3 setup.py install --tiledb=/usr/local
+    && python3.5 setup.py install --tiledb=/usr/local \
+    && rm -rf /home/tiledb/TileDB-Py-${pyversion}
 
-RUN chown -R tiledb: /home/tiledb
-
-ENV LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH"
 EXPOSE 22
 
-USER tiledb
+# this can be removed for TileDB-Py 0.4.3
+ENV LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH"
+
 WORKDIR /home/tiledb
 ENTRYPOINT /bin/bash
