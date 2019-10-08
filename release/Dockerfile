@@ -11,7 +11,7 @@ FROM tiledb:base
 # Optional components to enable (defaults to empty).
 ARG enable
 # Release version number of TileDB to install.
-ARG version=1.6.0
+ARG version=1.6.3
 # Release version number of TileDB-Py to install.
 # -- see below --
 
@@ -22,14 +22,14 @@ RUN wget -P /home/tiledb https://github.com/TileDB-Inc/TileDB/archive/${version}
     && cd /home/tiledb/TileDB-${version} \
     && mkdir build \
     && cd build \
-    && ../bootstrap --prefix=/usr/local --enable-s3 --enable=${enable} \
+    && ../bootstrap --prefix=/usr/local --enable-s3 --enable-serialization --enable=${enable} \
     && make -j$(nproc) \
     && make -j$(nproc) examples \
     && make install-tiledb \
     && rm -rf /home/tiledb/TileDB-${version}
 
 # Release version number of TileDB-Py to install.
-ARG pyversion=0.4.2
+ARG pyversion=0.4.3
 ENV pyversion=$pyversion SETUPTOOLS_SCM_PRETEND_VERSION=$pyversion
 
 # -----------------------------------------------------------------------------
