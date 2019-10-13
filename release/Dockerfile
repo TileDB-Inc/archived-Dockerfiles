@@ -25,8 +25,7 @@ RUN wget -P /home/tiledb https://github.com/TileDB-Inc/TileDB/archive/${version}
     && ../bootstrap --prefix=/usr/local --enable-s3 --enable-serialization --enable=${enable} \
     && make -j$(nproc) \
     && make -j$(nproc) examples \
-    && make install-tiledb \
-    && rm -rf /home/tiledb/TileDB-${version}
+    && make install-tiledb
 
 # Release version number of TileDB-Py to install.
 ARG pyversion=0.4.3
