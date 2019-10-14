@@ -11,9 +11,6 @@ https://hub.docker.com/r/tiledb/tiledb/
 ```
 docker pull tiledb/tiledb:<version>
 docker run -it tiledb/tiledb:<version>
-$ cd TileDB-<version>/build/examples/c_api
-$ ./tiledb_version_c
-TileDB v<version>
 ```
 
 ## Instructions
@@ -34,13 +31,10 @@ greatest (but potentially unstable) TileDB version.
 To run:
 
     docker run -it tiledb:release
-    cd ./build/examples
-    ./tiledb_version
 
 ## Optional components
 
-If you'd like to build TileDB with optional components such as HDFS or
-S3 support, use the `enable` build argument when building the images,
-e.g.:
+If you'd like to build TileDB with HDFS, use the `enable` build argument
+when building the images, e.g.:
 
-    docker build --build-arg enable=s3,hdfs -t tiledb:release
+    docker build --build-arg enable=hdfs -t tiledb:release
