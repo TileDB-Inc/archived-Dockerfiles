@@ -1,7 +1,7 @@
 # Extend the tiledb base image to allow R development work
 
 # To build:
-#   docker build -t tiledb/tiledb:r-base .
+#   docker build -t tiledb/tiledb:ci-r .
 
 FROM tiledb/tiledb:base
 
@@ -39,6 +39,21 @@ RUN apt-get update \
 RUN apt-get update \
         && install.r digest docopt testthat devtools roxygen2
         
-COPY buildTileDB.sh /usr/local/bin
+# Release version number of TileDB to install.
+ARG version=1.7.2
+
+# Install TileDB
+RUN wget -P /home/tiledb https://github.com/TileDB-Inc/TileDB/archive/${version}.tar.gz \
+    && tar xzf /home/tiledb/${version}.tar.gz -C /home/tiledb \
+    && rm /home/tiledb/${version}.tar.gz \
+    && cd /home/tiledb/TileDB-${version} \
+    && mkdir build \
+    && cd build \
+    && cmake .. -DTILEDB_S3=ON -DTILEDB_HDFS=OFF -DCMAKE_BUILD_TYPE=DEBUG -DTILEDB_SERIALIZATION=ON \
+    && make -j$(nproc) \
+    && make install-tiledb \
+    && rm -rf /home/tiledb/TileDB-${version}
+
+RUN ldconfig /usr/local/lib
 
 CMD ["bash"]
