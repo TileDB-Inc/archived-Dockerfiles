@@ -20,6 +20,9 @@ matrix:
         - USE_S3="ON"
         - TILEDB_IMG="release"
 
+    - env:
+        - TILEDB_IMG="ci-r"
+
 install:
   - docker build -t tiledb:base base
 
