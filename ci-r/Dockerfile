@@ -25,6 +25,7 @@ RUN apt-get update \
  		 r-base \
  		 r-base-dev \
  		 r-recommended \
+                 r-cran-data.table \
                  r-cran-littler \
                  libxml2-dev \
                  libcurl4-openssl-dev \
@@ -40,7 +41,7 @@ RUN apt-get update \
         && install.r digest docopt testthat devtools roxygen2
         
 # Release version number of TileDB to install.
-ARG version=1.7.2
+ARG version=1.7.4
 
 # Install TileDB
 RUN wget -P /home/tiledb https://github.com/TileDB-Inc/TileDB/archive/${version}.tar.gz \
