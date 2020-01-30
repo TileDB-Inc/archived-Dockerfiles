@@ -35,20 +35,16 @@ ENV pyversion=$pyversion SETUPTOOLS_SCM_PRETEND_VERSION=$pyversion
 # -----------------------------------------------------------------------------
 
 # Install Python bindings
-RUN wget -P /tmp https://bootstrap.pypa.io/get-pip.py \
-    && python3 /tmp/get-pip.py \
-    && rm /tmp/get-pip.py \
-    && wget https://github.com/TileDB-Inc/TileDB-Py/archive/${pyversion}.tar.gz -O /home/tiledb/Py-${pyversion}.tar.gz \
+RUN wget https://github.com/TileDB-Inc/TileDB-Py/archive/${pyversion}.tar.gz -O /home/tiledb/Py-${pyversion}.tar.gz \
     && tar xzf /home/tiledb/Py-${pyversion}.tar.gz -C /home/tiledb \
     && rm /home/tiledb/Py-${pyversion}.tar.gz \
     && cd /home/tiledb/TileDB-Py-${pyversion} \
-    && pip install -r requirements.txt \
-    && python3.5 setup.py install --tiledb=/usr/local \
+    && pip3 install -r requirements.txt \
+    && python3 setup.py install --tiledb=/usr/local \
     && rm -rf /home/tiledb/TileDB-Py-${pyversion}
 
 EXPOSE 22
 
-# this can be removed for TileDB-Py 0.4.3
 ENV LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH"
 
 WORKDIR /home/tiledb
