@@ -34,12 +34,21 @@ To run:
 
     docker run -it tiledb:release
 
+### Building with HDF Enabled
+
+TileDB at complitation does not require libhdfs or any jvm component except
+for unit tests. TileDB at runtime instead will `dlload` the needed `libhdfs`.
+As a result if you want HDFS support you must use a separate docker image
+which include the entire HDFS runtime as required
+
+    docker build --build-arg enable=hdfs -t tiledb:release-hdfs release-hdfs
+
 ### Optional components
 
 If you'd like to build TileDB with HDFS, use the `enable` build argument
 when building the images, e.g.:
 
-    docker build --build-arg enable=hdfs -t tiledb:release
+    docker build --build-arg enable=hdfs -t tiledb:release release
 
 ## TileDB-R
 

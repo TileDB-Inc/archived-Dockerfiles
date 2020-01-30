@@ -1,0 +1,209 @@
+#!/bin/bash
+
+#
+# The MIT License (MIT)
+#
+# Copyright (c) 2019-2020 TileDB, Inc.
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+#
+
+# Installs and configures HDFS.
+set -x
+
+HADOOP_VERSION="3.1.3"
+
+die() {
+  echo "$@" 1>&2 ; popd 2>/dev/null; exit 1
+}
+
+
+function update_apt_repo  {
+  apt-get install -y software-properties-common wget &&
+    apt-get update -y
+    apt-get install -y curl
+} 
+
+function install_java {
+  apt-get install -y openjdk-8-jre
+}
+
+function install_hadoop {
+  mkdir -p /usr/local/hadoop/ &&
+    chown -R $(whoami) /usr/local/hadoop || die "could not create local hadoop directory"
+  pushd /usr/local/hadoop
+  # download from closest mirror
+  curl -G -L -d "action=download" -d "filename=hadoop/common/hadoop-${HADOOP_VERSION}/hadoop-${HADOOP_VERSION}.tar.gz" \
+	  https://www.apache.org/dyn/mirrors/mirrors.cgi -o hadoop-${HADOOP_VERSION}.tar.gz
+  if [ $? -ne 0 ]; then
+    die "error downloading hadoop from apache mirror"
+  fi;
+  tar xzf hadoop-${HADOOP_VERSION}.tar.gz || die "error extracting hadoop download"
+  if [ -d ./home/hadoop-${HADOOP_VERSION} ]; then
+     rm -rf ./home/hadoop-${HADOOP_VERSION}
+  fi
+  mv hadoop-${HADOOP_VERSION} home && chown -R $(whoami) /usr/local/hadoop
+  popd
+}
+
+function create_hadoop_user {
+  useradd -m hduser &&
+    adduser hduser &&
+    chsh -s /bin/bash hduser
+  echo -e "hduser123\nhduser123\n" | passwd hduser
+
+  useradd -m hadoop &&
+    adduser hadoop &&
+    chsh -s /bin/bash hadoop
+  echo -e "hadoop123\nhadoop123\n" | passwd hadoop
+}
+
+function setup_core_xml {
+  export HADOOP_HOME=/usr/local/hadoop/home
+  local tmpfile=/tmp/hadoop_fafsa.xml
+  local file=$HADOOP_HOME/etc/hadoop/core-site.xml
+  rm -rf $file
+  cat >> $tmpfile <<EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+<property>
+<name>hadoop.tmp.dir</name>
+<value>/tmp/hadooop</value>
+<description>Temporary directories.</description>
+</property>
+<property>
+<name>fs.default.name</name>
+<value>hdfs://localhost:9000</value>
+</property>
+</configuration>
+EOF
+  tmpfile=/tmp/hadoop_fafsa.xml
+  mv $tmpfile $file
+}
+
+function setup_mapred_xml {
+  export HADOOP_HOME=/usr/local/hadoop/home
+  local tmpfile=/tmp/hadoop_mapred.xml
+  local file=$HADOOP_HOME/etc/hadoop/mapred-site.xml
+  rm -rf $file
+  cat >> $tmpfile <<EOT
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+<property>
+<name>mapred.job.tracker</name>
+<value>localhost:9010</value>
+<description>The tracker of MapReduce</description>
+</property>
+</configuration>
+EOT
+  tmpfile=/tmp/hadoop_mapred.xml
+  mv $tmpfile $file
+}
+
+function setup_hdfs_xml {
+  export HADOOP_HOME=/usr/local/hadoop/home
+  local tmpfile=/tmp/hadoop_hdfs.xml
+  local file=$HADOOP_HOME/etc/hadoop/hdfs-site.xml
+  rm -rf $file
+  cat >> $tmpfile <<EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+
+<property>
+<name>dfs.replication</name>
+<value>1</value>
+</property>
+
+<!-- libhdfs3 -->
+
+<property>
+<name>dfs.default.replica</name>
+<value>1</value>
+</property>
+
+<property>
+<name>output.replace-datanode-on-failure</name>
+<value>false</value>
+</property>
+
+<property>
+<name>dfs.client.read.shortcircuit</name>
+<value>false</value>
+</property>
+
+<property>
+<name>rpc.client.connect.retry</name>
+<value>10</value>
+</property>
+
+<property>
+<name>rpc.client.read.timeout</name>
+<value>3600000</value>
+</property>
+
+<property>
+<name>rpc.client.write.timeout</name>
+<value>3600000</value>
+</property>
+
+</configuration>
+EOF
+  tmpfile=/tmp/hadoop_hdfs.xml
+  mv $tmpfile $file
+}
+
+
+function setup_environment {
+  export HADOOP_HOME=/usr/local/hadoop/home
+  sed -i -- 's/JAVA_HOME=\${JAVA_HOME}/JAVA_HOME=\$(readlink -f \/usr\/bin\/java | sed "s:bin\/java::")/' \
+       $HADOOP_HOME/etc/hadoop/hadoop-env.sh
+  setup_core_xml &&
+    setup_mapred_xml &&
+    setup_hdfs_xml || die "error in generating xml configuration files"
+}
+
+function passwordless_ssh {
+  if [ -d ~/.ssh ]; then
+    rm -rf ~/.ssh
+  fi
+  apt-get --reinstall install -y openssh-server openssh-client || die "error (re)installing openssh"
+  mkdir ~/.ssh
+  ssh-keygen -t rsa -P "" -f ~/.ssh/id_rsa
+  cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+  ssh-keyscan -H localhost >> ~/.ssh/known_hosts
+  ssh-keyscan -H 127.0.0.1 >> ~/.ssh/known_hosts
+  ssh-keyscan -H 0.0.0.0 >> ~/.ssh/known_hosts
+  service ssh restart || die "error restarting ssh service"
+}
+
+function run {
+  update_apt_repo || die "error updating apt-repo"
+  install_java || die "error installing java"
+  create_hadoop_user || die "error creating hadoop user"
+  install_hadoop || die "error installing hadoop"
+  setup_environment || die "error setting up environment"
+  passwordless_ssh || die "error setting up passwordless ssh"
+}
+
+run
+# sleep to make sure the ssh service restart is done because systemd
+sleep 2
