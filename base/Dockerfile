@@ -22,7 +22,7 @@ RUN apt-get update && apt-get install -y \
     libssl-dev \
     && apt-get clean \
     && apt-get purge -y \
-    && rm -rf /bar/lib/apt/lists* \
+    && rm -rf /var/lib/apt/lists* \
     && update-alternatives --install /usr/local/bin/python3 python3 /usr/bin/python3.5 1
 
 RUN cd /tmp \
