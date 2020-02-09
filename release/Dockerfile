@@ -6,12 +6,12 @@
 # Use the build arg 'enable' to configure optional TileDB components, e.g.:
 #   docker build --build-arg enable=s3,hdfs -t tiledb:release
 
-FROM tiledb:base
+FROM tiledb/tiledb:base
 
 # Optional components to enable (defaults to empty).
 ARG enable
 # Release version number of TileDB to install.
-ARG version=1.7.4
+ARG version=1.7.5
 # Release version number of TileDB-Py to install.
 # -- see below --
 
@@ -29,7 +29,7 @@ RUN wget -P /home/tiledb https://github.com/TileDB-Inc/TileDB/archive/${version}
     && rm -rf /home/tiledb/TileDB-${version}
 
 # Release version number of TileDB-Py to install.
-ARG pyversion=0.5.5
+ARG pyversion=0.5.6
 ENV pyversion=$pyversion SETUPTOOLS_SCM_PRETEND_VERSION=$pyversion
 
 # -----------------------------------------------------------------------------

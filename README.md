@@ -23,8 +23,8 @@ docker run -it tiledb/tiledb:<version>
 ```
 git clone https://github.com/TileDB-Inc/TileDB-Docker
 cd TileDB-Docker
-docker build -t tiledb:base base
-docker build -t tiledb:release release
+docker build -t tiledb/tiledb:base base
+docker build -t tiledb/tiledb:release release
 ```
 
 There is also a `tiledb:dev` image if you'd like the latest and
@@ -32,14 +32,14 @@ greatest (but potentially unstable) TileDB version.
 
 To run:
 
-    docker run -it tiledb:release
+    docker run -it tiledb/tiledb:release
 
 ### Optional components
 
 If you'd like to build TileDB with HDFS, use the `enable` build argument
 when building the images, e.g.:
 
-    docker build --build-arg enable=hdfs -t tiledb:release
+    docker build --build-arg enable=hdfs -t tiledb/tiledb:release
 
 ## TileDB-R
 
@@ -54,5 +54,5 @@ which is used only for CI. This image is build and designed to facilitate CI.
 ```
 git clone https://github.com/TileDB-Inc/TileDB-Docker
 cd TileDB-Docker
-docker build -t tiledb:ci-r ci-r
+docker build -t tiledb/ci-r ci-r
 ```

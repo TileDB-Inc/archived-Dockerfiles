@@ -8,7 +8,7 @@
 # Use the build arg 'enable' to configure optional TileDB components, e.g.:
 #   docker build --build-arg enable=s3,hdfs -t tiledb:dev
 
-FROM tiledb:base
+FROM tiledb/tiledb:base
 
 # Optional components to enable (defaults to empty).
 ARG enable
