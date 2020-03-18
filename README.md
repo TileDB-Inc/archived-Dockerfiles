@@ -43,10 +43,28 @@ when building the images, e.g.:
 
 ## TileDB-R
 
-There is an image available for [TileDB-R](https://github.com/TileDB-Inc/TileDB-R)
-which is used only for CI. This image is build and designed to facilitate CI.
+There is two images available for [TileDB-R](https://github.com/TileDB-Inc/TileDB-R).
 
-### Instructions
+### User Image
+
+The user image is meant for end users to be able to use TileDB-R.
+
+#### Instructions
+
+1. Install the Docker daemon from https://www.docker.com/community-edition
+
+2. Clone the TileDB-Docker repo and build the images:
+```
+git clone https://github.com/TileDB-Inc/TileDB-Docker
+cd TileDB-Docker
+docker build -t tiledb/tiledb-r r
+```
+
+### CI Image
+
+The CI image is setup for unit testing via CI.
+
+#### Instructions
 
 1. Install the Docker daemon from https://www.docker.com/community-edition
 

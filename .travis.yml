@@ -23,6 +23,9 @@ matrix:
     - env:
         - TILEDB_IMG="ci-r"
 
+    - env:
+        - TILEDB_IMG="r"
+
 install:
   - docker build -t tiledb:base base
 
