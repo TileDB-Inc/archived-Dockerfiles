@@ -11,7 +11,7 @@ FROM tiledb/tiledb:base
 # Optional components to enable (defaults to empty).
 ARG enable
 # Release version number of TileDB to install.
-ARG version=1.7.6
+ARG version=1.7.7
 # Release version number of TileDB-Py to install.
 # -- see below --
 
@@ -29,7 +29,7 @@ RUN wget -P /home/tiledb https://github.com/TileDB-Inc/TileDB/archive/${version}
     && rm -rf /home/tiledb/TileDB-${version}
 
 # Release version number of TileDB-Py to install.
-ARG pyversion=0.5.6
+ARG pyversion=0.5.9
 ENV pyversion=$pyversion SETUPTOOLS_SCM_PRETEND_VERSION=$pyversion
 
 # -----------------------------------------------------------------------------
