@@ -41,7 +41,7 @@ RUN apt-get update \
         && install.r digest docopt testthat devtools roxygen2
         
 # Release version number of TileDB to install.
-ARG version=1.7.6
+ARG version=1.7.7
 
 # Install TileDB
 RUN wget -P /home/tiledb https://github.com/TileDB-Inc/TileDB/archive/${version}.tar.gz \
