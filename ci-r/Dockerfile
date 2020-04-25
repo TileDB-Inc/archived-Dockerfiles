@@ -25,8 +25,14 @@ RUN apt-get update \
  		 r-base \
  		 r-base-dev \
  		 r-recommended \
+                 r-cran-bit64 \
                  r-cran-data.table \
+                 r-cran-digest \
+                 r-cran-devtools \
                  r-cran-littler \
+                 r-cran-roxygen2 \
+                 r-cran-testthat \
+                 r-cran-zoo \
                  libxml2-dev \
                  libcurl4-openssl-dev \
   	&& ln -s /usr/lib/R/site-library/littler/examples/install.r /usr/local/bin/install.r \
@@ -36,9 +42,9 @@ RUN apt-get update \
  	&& rm -rf /tmp/downloaded_packages/ /tmp/*.rds \
  	&& rm -rf /var/lib/apt/lists/*
 
-## Trusty is too old so these have to installed from source
+## Install what is not available as r-cran-* directly from source
 RUN apt-get update \
-        && install.r digest docopt testthat devtools roxygen2
+    && install.r docopt nanotime
         
 # Release version number of TileDB to install.
 ARG version=1.7.7
