@@ -26,8 +26,6 @@ RUN git clone https://github.com/TileDB-Inc/TileDB.git /home/tiledb/TileDB \
 
 # Install Python bindings
 RUN git clone https://github.com/TileDB-Inc/TileDB-Py.git /home/tiledb/TileDB-Py \
-    && wget -P /tmp https://bootstrap.pypa.io/get-pip.py \
-    && python3 /tmp/get-pip.py \
     && rm /tmp/get-pip.py \
     && cd /home/tiledb/TileDB-Py \
     && pip install -r requirements_dev.txt \
