@@ -11,7 +11,7 @@ FROM tiledb/tiledb:base
 # Optional components to enable (defaults to empty).
 ARG enable
 # Release version number of TileDB to install.
-ARG version=1.7.7
+ARG version=2.0.0
 # Release version number of TileDB-Py to install.
 # -- see below --
 
@@ -22,28 +22,25 @@ RUN wget -P /home/tiledb https://github.com/TileDB-Inc/TileDB/archive/${version}
     && cd /home/tiledb/TileDB-${version} \
     && mkdir build \
     && cd build \
-    && ../bootstrap --prefix=/usr/local --enable-s3 --enable-serialization --enable=${enable} \
+    && ../bootstrap --prefix=/usr/local --enable-gcs --enable-azure --enable-s3 --enable-serialization --enable=${enable} \
     && make -j$(nproc) \
     && make -j$(nproc) examples \
     && make install-tiledb \
     && rm -rf /home/tiledb/TileDB-${version}
 
 # Release version number of TileDB-Py to install.
-ARG pyversion=0.5.9
+ARG pyversion=0.6.0
 ENV pyversion=$pyversion SETUPTOOLS_SCM_PRETEND_VERSION=$pyversion
 
 # -----------------------------------------------------------------------------
 
 # Install Python bindings
-RUN wget -P /tmp https://bootstrap.pypa.io/get-pip.py \
-    && python3 /tmp/get-pip.py \
-    && rm /tmp/get-pip.py \
-    && wget https://github.com/TileDB-Inc/TileDB-Py/archive/${pyversion}.tar.gz -O /home/tiledb/Py-${pyversion}.tar.gz \
+RUN wget https://github.com/TileDB-Inc/TileDB-Py/archive/${pyversion}.tar.gz -O /home/tiledb/Py-${pyversion}.tar.gz \
     && tar xzf /home/tiledb/Py-${pyversion}.tar.gz -C /home/tiledb \
     && rm /home/tiledb/Py-${pyversion}.tar.gz \
     && cd /home/tiledb/TileDB-Py-${pyversion} \
-    && pip install -r requirements.txt \
-    && python3.5 setup.py install --tiledb=/usr/local \
+    && pip3 install -r requirements.txt \
+    && python3 setup.py install --tiledb=/usr/local \
     && rm -rf /home/tiledb/TileDB-Py-${pyversion}
 
 EXPOSE 22
