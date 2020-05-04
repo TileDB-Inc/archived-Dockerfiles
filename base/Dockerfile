@@ -4,7 +4,7 @@
 # docker build -t tiledb:base
 
 # Ubuntu Trusty
-FROM ubuntu:trusty
+FROM ubuntu:18.04
 
 # Setup home environment
 RUN useradd tiledb
@@ -17,18 +17,11 @@ RUN apt-get update && apt-get install -y \
     unzip \
     git \
     cmake \
-    python3.5 \
-    python3.5-dev \
+    python3 \
+    python3-dev \
+    python3-pip \
     libssl-dev \
     && apt-get clean \
     && apt-get purge -y \
-    && rm -rf /var/lib/apt/lists* \
-    && update-alternatives --install /usr/local/bin/python3 python3 /usr/bin/python3.5 1
+    && rm -rf /var/lib/apt/lists*
 
-RUN cd /tmp \
-    && wget https://cmake.org/files/v3.3/cmake-3.3.2-Linux-x86_64.tar.gz \
-    && tar -xzf cmake-3.3.2-Linux-x86_64.tar.gz \
-    && cp -R cmake-3.3.2-Linux-x86_64/bin /usr/ \
-    && cp -R cmake-3.3.2-Linux-x86_64/doc /usr/ \
-    && cp -R cmake-3.3.2-Linux-x86_64/man /usr/ \
-    && cp -R cmake-3.3.2-Linux-x86_64/share /usr/
