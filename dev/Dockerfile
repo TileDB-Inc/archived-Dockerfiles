@@ -18,7 +18,7 @@ RUN git clone https://github.com/TileDB-Inc/TileDB.git /home/tiledb/TileDB \
     && cd /home/tiledb/TileDB \
     && mkdir build \
     && cd build \
-    && ../bootstrap --enable-debug --enable-verbose --enable=${enable} \
+    && ../bootstrap --enable-debug --enable-verbose --enable-azure --enable-s3 --enable-serialization --enable=${enable} \
     && make -j2 \
     && make -j2 examples \
     && make install-tiledb \
@@ -26,9 +26,8 @@ RUN git clone https://github.com/TileDB-Inc/TileDB.git /home/tiledb/TileDB \
 
 # Install Python bindings
 RUN git clone https://github.com/TileDB-Inc/TileDB-Py.git /home/tiledb/TileDB-Py \
-    && rm /tmp/get-pip.py \
     && cd /home/tiledb/TileDB-Py \
-    && pip install -r requirements_dev.txt \
+    && pip3 install -r requirements_dev.txt \
     && python3 setup.py develop --tiledb=/home/tiledb/TileDB/dist
 
 RUN chown -R tiledb: /home/tiledb

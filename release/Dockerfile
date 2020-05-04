@@ -22,7 +22,7 @@ RUN wget -P /home/tiledb https://github.com/TileDB-Inc/TileDB/archive/${version}
     && cd /home/tiledb/TileDB-${version} \
     && mkdir build \
     && cd build \
-    && ../bootstrap --prefix=/usr/local --enable-gcs --enable-azure --enable-s3 --enable-serialization --enable=${enable} \
+    && ../bootstrap --prefix=/usr/local --enable-azure --enable-s3 --enable-serialization --enable=${enable} \
     && make -j$(nproc) \
     && make -j$(nproc) examples \
     && make install-tiledb \
