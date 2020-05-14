@@ -19,7 +19,6 @@ RUN git clone https://github.com/TileDB-Inc/TileDB.git /home/tiledb/TileDB \
     && mkdir build \
     && cd build \
     && ../bootstrap --enable-debug --enable-verbose --enable-azure --enable-s3 --enable-serialization --enable=${enable} \
-    && cmake -DTILEDB_LOG_OUTPUT_ON_FAILURE=ON . \
     && make -j2 \
     && make -j2 examples \
     && make install-tiledb \
