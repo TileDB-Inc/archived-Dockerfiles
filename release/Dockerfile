@@ -23,7 +23,6 @@ RUN wget -P /home/tiledb https://github.com/TileDB-Inc/TileDB/archive/${version}
     && mkdir build \
     && cd build \
     && ../bootstrap --prefix=/usr/local --enable-azure --enable-s3 --enable-serialization --enable=${enable} \
-    && cmake -DTILEDB_LOG_OUTPUT_ON_FAILURE=ON . \
     && make -j$(nproc) \
     && make -j$(nproc) examples \
     && make install-tiledb \
