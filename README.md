@@ -1,3 +1,7 @@
+> [!IMPORTANT]  
+> This repository is archived. Please see the [TileDB-Inc/TileDB example Dockerfile](https://github.com/TileDB-Inc/TileDB/tree/dev/examples/Dockerfile) for an up-to-date and tested Dockerfile.
+
+
 # TileDB-Docker
 
 [![Build Status](https://travis-ci.org/TileDB-Inc/TileDB-Docker.svg?branch=master)](https://travis-ci.org/TileDB-Inc/TileDB-Docker)
